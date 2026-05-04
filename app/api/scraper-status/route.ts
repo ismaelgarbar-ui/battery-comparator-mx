@@ -13,7 +13,7 @@ function getSupabase() {
 export async function GET() {
   const supabase = getSupabase();
 
-  const [{ data: logs }, { data: counts }] = await Promise.all([
+  const [{ data: logs }, { count }] = await Promise.all([
     supabase
       .from("scraping_logs")
       .select("ejecutado_at, tienda, status, productos, mensaje")
@@ -21,25 +21,16 @@ export async function GET() {
       .limit(10),
     supabase
       .from("baterias_actuales")
-      .select("tienda")
-      .eq("tienda", "autozone")
-      .limit(500),
+      .select("*", { count: "exact", head: true })
+      .eq("tienda", "autozone"),
   ]);
 
   const lastLog = logs?.[0] ?? null;
-  const totalProducts = counts?.length ?? 0;
-
-  // Detectar si hay un scrape en curso (log reciente sin completar o muy reciente)
-  const isRunning =
-    lastLog?.status === "running" ||
-    (lastLog &&
-      lastLog.status === "success" &&
-      Date.now() - new Date(lastLog.ejecutado_at).getTime() < 60_000);
+  const totalProducts = count ?? 0;
 
   return NextResponse.json({
     lastLog,
     totalProducts,
-    isRunning,
     recentLogs: logs ?? [],
   });
 }

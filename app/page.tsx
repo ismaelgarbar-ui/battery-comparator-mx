@@ -4,7 +4,6 @@ import { useCallback, useEffect, useState, useTransition, useRef } from "react";
 import { Battery, BatteryFilters } from "@/types/battery";
 import FilterBar from "@/components/FilterBar";
 import BatteryCard from "@/components/BatteryCard";
-import StatsBar from "@/components/StatsBar";
 import ScraperStatusBar from "@/components/ScraperStatusBar";
 import { RefreshCw, AlertCircle, BatteryFull, Play, CheckCircle } from "lucide-react";
 
@@ -91,9 +90,6 @@ export default function HomePage() {
           Precios actualizados directamente desde AutoZone MX. Busca por nombre, grupo BCI o marca.
         </p>
       </div>
-
-      {/* Stats */}
-      <StatsBar />
 
       {/* Scraper status */}
       <ScraperStatusBar isScraperRunning={scraperStatus === "running"} />
