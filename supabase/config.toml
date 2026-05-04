@@ -1,0 +1,5 @@
+[project]
+project_id = "tu-project-id"
+
+[functions.battery-scraper]
+verify_jwt = false
