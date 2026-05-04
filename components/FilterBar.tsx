@@ -1,19 +1,13 @@
 "use client";
 
 import { BatteryFilters } from "@/types/battery";
+import { Search, X } from "lucide-react";
 
 interface FilterBarProps {
   filters: BatteryFilters;
   onChange: (filters: BatteryFilters) => void;
   totalCount: number;
 }
-
-const STORES = [
-  { value: "todas", label: "Todas las tiendas" },
-  { value: "oreilly", label: "O'Reilly" },
-  { value: "autozone", label: "AutoZone" },
-  { value: "lth", label: "LTH" },
-];
 
 const GRADES = [
   { value: "todas", label: "Todas las gamas" },
@@ -30,38 +24,37 @@ const SORT_OPTIONS = [
   { value: "reciente", label: "Más recientes" },
 ];
 
-export default function FilterBar({
-  filters,
-  onChange,
-  totalCount,
-}: FilterBarProps) {
+const selectClass =
+  "block w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500";
+
+export default function FilterBar({ filters, onChange, totalCount }: FilterBarProps) {
   const set = <K extends keyof BatteryFilters>(key: K, value: BatteryFilters[K]) =>
     onChange({ ...filters, [key]: value });
 
-  const selectClass =
-    "block w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500";
-
   return (
-    <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
-      <div className="flex flex-col sm:flex-row gap-4">
-        {/* Tienda */}
-        <div className="flex-1 min-w-0">
-          <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">
-            Tienda
-          </label>
-          <select
-            className={selectClass}
-            value={filters.tienda}
-            onChange={(e) => set("tienda", e.target.value as BatteryFilters["tienda"])}
+    <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-5 space-y-4">
+      {/* Buscador */}
+      <div className="relative">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+        <input
+          type="text"
+          placeholder="Buscar por nombre, grupo BCI, marca..."
+          className="block w-full rounded-lg border border-slate-200 bg-white pl-9 pr-9 py-2.5 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          value={filters.search}
+          onChange={(e) => set("search", e.target.value)}
+        />
+        {filters.search && (
+          <button
+            onClick={() => set("search", "")}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
           >
-            {STORES.map((s) => (
-              <option key={s.value} value={s.value}>
-                {s.label}
-              </option>
-            ))}
-          </select>
-        </div>
+            <X className="w-4 h-4" />
+          </button>
+        )}
+      </div>
 
+      {/* Filtros secundarios */}
+      <div className="flex flex-col sm:flex-row gap-3">
         {/* Gama */}
         <div className="flex-1 min-w-0">
           <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">
@@ -73,9 +66,7 @@ export default function FilterBar({
             onChange={(e) => set("gama", e.target.value as BatteryFilters["gama"])}
           >
             {GRADES.map((g) => (
-              <option key={g.value} value={g.value}>
-                {g.label}
-              </option>
+              <option key={g.value} value={g.value}>{g.label}</option>
             ))}
           </select>
         </div>
@@ -92,9 +83,7 @@ export default function FilterBar({
             min={0}
             step={100}
             value={filters.precio_max ?? ""}
-            onChange={(e) =>
-              set("precio_max", e.target.value ? parseFloat(e.target.value) : null)
-            }
+            onChange={(e) => set("precio_max", e.target.value ? parseFloat(e.target.value) : null)}
           />
         </div>
 
@@ -109,16 +98,13 @@ export default function FilterBar({
             onChange={(e) => set("sort_by", e.target.value as BatteryFilters["sort_by"])}
           >
             {SORT_OPTIONS.map((o) => (
-              <option key={o.value} value={o.value}>
-                {o.label}
-              </option>
+              <option key={o.value} value={o.value}>{o.label}</option>
             ))}
           </select>
         </div>
       </div>
 
-      {/* Resultado count */}
-      <p className="mt-3 text-xs text-slate-400">
+      <p className="text-xs text-slate-400">
         {totalCount === 0
           ? "Sin resultados con estos filtros"
           : `${totalCount} bater${totalCount === 1 ? "ía" : "ías"} encontradas`}

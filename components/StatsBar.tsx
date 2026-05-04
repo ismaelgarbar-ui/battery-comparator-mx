@@ -13,9 +13,7 @@ interface Stats {
 }
 
 const STORE_LABELS: Record<string, string> = {
-  oreilly: "O'Reilly",
   autozone: "AutoZone",
-  lth: "LTH",
 };
 
 export default function StatsBar() {

@@ -1,4 +1,4 @@
-export type Store = "oreilly" | "autozone" | "lth";
+export type Store = "autozone";
 
 export type BatteryGrade = "basica" | "estandar" | "premium" | "agm" | "otro";
 
@@ -20,10 +20,8 @@ export interface Battery {
 }
 
 export interface BatteryFilters {
-  tienda: Store | "todas";
   gama: BatteryGrade | "todas";
-  amperaje_min: number | null;
-  amperaje_max: number | null;
   precio_max: number | null;
   sort_by: "precio_asc" | "precio_desc" | "amperaje_desc" | "reciente";
+  search: string;
 }
