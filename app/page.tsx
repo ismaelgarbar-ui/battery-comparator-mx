@@ -5,6 +5,7 @@ import { Battery, BatteryFilters } from "@/types/battery";
 import FilterBar from "@/components/FilterBar";
 import BatteryCard from "@/components/BatteryCard";
 import StatsBar from "@/components/StatsBar";
+import ScraperStatusBar from "@/components/ScraperStatusBar";
 import { RefreshCw, AlertCircle, BatteryFull, Play, CheckCircle } from "lucide-react";
 
 const DEFAULT_FILTERS: BatteryFilters = {
@@ -93,6 +94,9 @@ export default function HomePage() {
 
       {/* Stats */}
       <StatsBar />
+
+      {/* Scraper status */}
+      <ScraperStatusBar isScraperRunning={scraperStatus === "running"} />
 
       {/* Filtros + buscador */}
       <FilterBar filters={filters} onChange={handleFilterChange} totalCount={batteries.length} />
